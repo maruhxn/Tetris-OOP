@@ -1,6 +1,14 @@
 package game.block;
 
-public abstract class Block {
+public class Block {
+
+    protected Position position;
+    protected BlockType blockType;
+
+    public Block(BlockType blockType) {
+        this.position = new Position();
+        this.blockType = blockType;
+    }
 
     public void moveDown() {
 
@@ -15,5 +23,22 @@ public abstract class Block {
 
     public void rotate() {
 
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public BlockType getBlockType() {
+        return blockType;
+    }
+
+    public int getHeight() {
+        return blockType.getShape().length;
+    }
+
+    public int getWidth() {
+        if (blockType.getShape().length > 0) return blockType.getShape()[0].length;
+        return 0;
     }
 }

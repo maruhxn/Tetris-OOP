@@ -1,6 +1,6 @@
 package screen;
 
-import setting.BoardSize;
+import setting.GameSize;
 
 public class SettingScreen extends Screen {
 
@@ -8,7 +8,7 @@ public class SettingScreen extends Screen {
 
     }
 
-    public void selectBoardSize(BoardSize boardSize) {
+    public void selectBoardSize(GameSize gameSize) {
 
     }
 
