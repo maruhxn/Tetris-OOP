@@ -86,7 +86,7 @@ public class GameScreen extends Screen {
                 else if (e.getKeyCode() == GameKey.MOVE_RIGHT_KEY.getKey()) board.moveRight();
                 else if (e.getKeyCode() == GameKey.MOVE_DOWN_KEY.getKey()) board.moveDown();
 //                else if (e.getKeyCode() == GameKey.SUPER_DROP_KEY.getKey()) board.getCurrBlock().superDrop();
-//                else if (e.getKeyCode() == GameKey.ROTATE_KEY.getKey()) board.getCurrBlock().rotateBlock();
+                else if (e.getKeyCode() == GameKey.ROTATE_KEY.getKey()) board.rotateBlock();
 //                else if (e.getKeyCode() == GameKey.PAUSE_KEY.getKey()) pause();
 //                else if (e.getKeyCode() == GameKey.GAME_OVER_KEY.getKey()) gameOver();
 
@@ -112,7 +112,7 @@ public class GameScreen extends Screen {
 
         private void drawBlock(Graphics g) {
             Block currBlock = board.getCurrBlock();
-            int[][] blockShape = currBlock.getBlockType().getShape();
+            int[][] blockShape = currBlock.getShape();
             Color color = currBlock.getBlockType().getColor();
 
             for (int i = 0; i < currBlock.getHeight(); ++i) {
@@ -176,7 +176,7 @@ public class GameScreen extends Screen {
                 Graphics2D g2d = (Graphics2D) g;
 
                 if (nextBlock != null) {
-                    int[][] blockShape = nextBlock.getBlockType().getShape();
+                    int[][] blockShape = nextBlock.getShape();
                     int blockWidth = nextBlock.getWidth();
                     int blockHeight = nextBlock.getHeight();
                     g2d.setColor(nextBlock.getBlockType().getColor());

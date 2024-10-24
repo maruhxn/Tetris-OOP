@@ -38,28 +38,8 @@ public class Board {
         spawnBlock(); // Create Next block
     }
 
-
-    public boolean canMoveDown() {
-        if (currBlock.getBottomEdge() >= GAME_SIZE.getHeight()) return false;
-
-        int[][] blockShape = currBlock.getBlockType().getShape();
-
-        for (int i = 0; i < currBlock.getHeight(); ++i) {
-            for (int j = 0; j < currBlock.getWidth(); ++j) {
-                if (blockShape[i][j] == 1) {
-                    int x = currBlock.getPosition().getX() / GAME_SIZE.getBlockCellSize() + j;
-                    int y = currBlock.getPosition().getY() / GAME_SIZE.getBlockCellSize() + i;
-//                    // 현재 y 바로 다음 칸의 background가 채워져 있다면 충돌.
-                    if (lines[y + 1][x] != null) return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     public void fixBlock() {
-        int[][] shape = currBlock.getBlockType().getShape();
+        int[][] shape = currBlock.getShape();
         int h = currBlock.getHeight();
         int w = currBlock.getWidth();
         Color color = currBlock.getBlockType().getColor();
@@ -75,44 +55,58 @@ public class Board {
         }
     }
 
-    public boolean canMoveLeft() {
-        if (currBlock.getLeftEdge() <= 0) return false;
-
-        int[][] blockShape = currBlock.getBlockType().getShape();
+    private boolean canMove(int xDirection, int yDirection) {
+        int[][] blockShape = currBlock.getShape();
 
         for (int i = 0; i < currBlock.getHeight(); ++i) {
             for (int j = 0; j < currBlock.getWidth(); ++j) {
                 if (blockShape[i][j] == 1) {
-                    int x = currBlock.getPosition().getX() / GAME_SIZE.getBlockCellSize() + j;
-                    int y = currBlock.getPosition().getY() / GAME_SIZE.getBlockCellSize() + i;
-                    if (lines[y][x - 1] != null) return false;
+                    int x = currBlock.getPosition().getX() / GAME_SIZE.getBlockCellSize() + j + xDirection;
+                    int y = currBlock.getPosition().getY() / GAME_SIZE.getBlockCellSize() + i + yDirection;
+
+                    if (x < 0 || x >= GAME_SIZE.getGameAreaWidth() / GAME_SIZE.getBlockCellSize() ||
+                            y < 0 || y >= GAME_SIZE.getHeight() / GAME_SIZE.getBlockCellSize() ||
+                            lines[y][x] != null) {
+                        return false;
+                    }
                 }
             }
         }
 
         return true;
+    }
+
+    public boolean canMoveDown() {
+        return canMove(0, 1);
+    }
+
+    public boolean canMoveLeft() {
+        return canMove(-1, 0);
     }
 
     public boolean canMoveRight() {
-        if (currBlock.getRightEdge() >= GAME_SIZE.getGameAreaWidth()) return false;
+        return canMove(1, 0);
+    }
 
-        int[][] blockShape = currBlock.getBlockType().getShape();
+    public boolean canRotate() {
+        int[][] rotatedShape = currBlock.getRotatedShape();
 
-        for (int i = 0; i < currBlock.getHeight(); ++i) {
-            for (int j = 0; j < currBlock.getWidth(); ++j) {
-                if (blockShape[i][j] == 1) {
+        for (int i = 0; i < rotatedShape.length; ++i) {
+            for (int j = 0; j < rotatedShape[0].length; ++j) {
+                if (rotatedShape[i][j] == 1) {
                     int x = currBlock.getPosition().getX() / GAME_SIZE.getBlockCellSize() + j;
                     int y = currBlock.getPosition().getY() / GAME_SIZE.getBlockCellSize() + i;
-                    if (lines[y][x + 1] != null) return false;
+
+                    if (x < 0 || x >= GAME_SIZE.getGameAreaWidth() / GAME_SIZE.getBlockCellSize() ||
+                            y < 0 || y >= GAME_SIZE.getHeight() / GAME_SIZE.getBlockCellSize() ||
+                            lines[y][x] != null) {
+                        return false;
+                    }
                 }
             }
         }
 
         return true;
-    }
-
-    public boolean canRotate() {
-        return false;
     }
 
     public void clearLines() {
@@ -164,6 +158,12 @@ public class Board {
     public void moveRight() {
         if (canMoveRight()) {
             currBlock.moveRight();
+        }
+    }
+
+    public void rotateBlock() {
+        if (canRotate()) {
+            currBlock.rotate();
         }
     }
 }

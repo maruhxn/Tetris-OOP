@@ -4,12 +4,14 @@ import static setting.GameSettings.GAME_SIZE;
 
 public class Block {
 
-    protected Position position;
-    protected BlockType blockType;
+    private Position position;
+    private BlockType blockType;
+    private int[][] shape;
 
     public Block(BlockType blockType) {
         this.position = new Position();
         this.blockType = blockType;
+        this.shape = blockType.getShape();
     }
 
     public void moveDown() {
@@ -25,7 +27,22 @@ public class Block {
     }
 
     public void rotate() {
+        this.shape = getRotatedShape().clone();
+    }
 
+    public int[][] getRotatedShape() {
+        int n = shape.length;
+        int m = shape[0].length;
+
+        int[][] rotatedShape = new int[m][n];
+
+        // 시계 방향으로 90도 회전
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                rotatedShape[j][n - 1 - i] = shape[i][j];
+            }
+        }
+        return rotatedShape;
     }
 
     public Position getPosition() {
@@ -37,11 +54,11 @@ public class Block {
     }
 
     public int getHeight() {
-        return blockType.getShape().length;
+        return getShape().length;
     }
 
     public int getWidth() {
-        if (blockType.getShape().length > 0) return blockType.getShape()[0].length;
+        if (getShape().length > 0) return getShape()[0].length;
         return 0;
     }
 
@@ -55,5 +72,9 @@ public class Block {
 
     public int getRightEdge() {
         return this.position.getX() + (getWidth() * GAME_SIZE.getBlockCellSize());
+    }
+
+    public int[][] getShape() {
+        return shape;
     }
 }
