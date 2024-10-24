@@ -29,6 +29,7 @@ public class GameScreen extends Screen {
 
         eventHandler = new EventHandler();
         score = new Score();
+        board = new Board();
 
         setFocusable(true);
         requestFocusInWindow();
@@ -41,15 +42,20 @@ public class GameScreen extends Screen {
 
         add(boardArea, BorderLayout.WEST);
         add(gameInfoArea, BorderLayout.EAST);
-    }
 
-    private void triggerMoveBlock() {
         boardArea.revalidate();
         gameInfoArea.revalidate();
     }
 
+    private void triggerMoveBlock() {
+        board.moveDown();
+        board.clearLines();
+        boardArea.repaint();
+        gameInfoArea.repaint();
+    }
+
     public void start() {
-        board.spawnBlock();
+        board.setUp();
         timer.start();
     }
 
@@ -69,34 +75,27 @@ public class GameScreen extends Screen {
     }
 
     public class BoardArea extends JPanel {
-        private Color[][] background;
 
         public BoardArea() {
             setBackground(Color.BLACK);
             setForeground(Color.WHITE);
             setPreferredSize(new Dimension(GAME_SIZE.getGameAreaWidth(), GAME_SIZE.getHeight()));
-
-            board = new Board();
-            board.setUp();
-            background = new Color[GAME_SIZE.getHeight()][GAME_SIZE.getGameAreaWidth()];
         }
 
         @Override
         public void paint(Graphics g) {
             super.paint(g);
-            drawBackground(g);
+            drawLines(g);
             drawBlock(g);
         }
 
         private void drawBlock(Graphics g) {
             Block currBlock = board.getCurrBlock();
             int[][] blockShape = currBlock.getBlockType().getShape();
-            int w = currBlock.getWidth();
-            int h = currBlock.getHeight();
             Color color = currBlock.getBlockType().getColor();
 
-            for (int i = 0; i < h; ++i) {
-                for (int j = 0; j < w; ++j) {
+            for (int i = 0; i < currBlock.getHeight(); ++i) {
+                for (int j = 0; j < currBlock.getWidth(); ++j) {
                     if (blockShape[i][j] == 1) {
                         int x = currBlock.getPosition().getX() + j * GAME_SIZE.getBlockCellSize();
                         int y = currBlock.getPosition().getY() + i * GAME_SIZE.getBlockCellSize();
@@ -111,14 +110,13 @@ public class GameScreen extends Screen {
 //            g.drawString(((GameScreen) getParent()).getStatus() ? "PAUSE!!" : "PLAYING!", GAME_SIZE.getGameAreaWidth() / 2 - 20, 20);
         }
 
-        private void drawBackground(Graphics g) {
-            Color color;
-
-            for (int i = 0; i < GAME_SIZE.getHeight(); i = i + GAME_SIZE.getBlockCellSize()) {
-                for (int j = 0; j < GAME_SIZE.getGameAreaWidth(); j = j + GAME_SIZE.getBlockCellSize()) {
-                    color = background[i][j];
+        private void drawLines(Graphics g) {
+            Color[][] lines = board.getLines();
+            for (int i = 0; i < lines.length; i++) {
+                for (int j = 0; j < lines[0].length; j++) {
+                    Color color = lines[i][j];
                     if (color != null) {
-                        drawBlockByGraphics(g, color, j, i);
+                        drawBlockByGraphics(g, color, j * GAME_SIZE.getBlockCellSize(), i * GAME_SIZE.getBlockCellSize());
                     }
                 }
             }

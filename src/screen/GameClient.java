@@ -1,16 +1,14 @@
 package screen;
 
-import setting.GameSettings;
-import setting.GameSize;
-
 import javax.swing.*;
 import java.awt.*;
+
+import static setting.GameSettings.GAME_SIZE;
 
 public class GameClient extends JFrame {
 
     public static final int WINDOW_BORDER = 16;
     public static final int WINDOW_MANAGER_HEIGHT = 39;
-    public static final GameSize gameSize = GameSettings.GAME_SIZE;
 
     private MainScreen mainScreen;
     private GameScreen gameScreen;
@@ -31,11 +29,22 @@ public class GameClient extends JFrame {
     }
 
     public void start() {
-        setSize(gameSize.getWidth() + WINDOW_BORDER, gameSize.getHeight() + WINDOW_MANAGER_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setResizable(false);
-        setContentPane(new MainScreen());
+        setContentPane(mainScreen);
+
+        // 먼저 창 크기를 자동으로 설정
+        pack();
+
+        // pack() 후에 정확한 Insets를 가져와 창 크기 조정
+        Insets insets = getInsets();
+        int totalWidth = GAME_SIZE.getWidth() + insets.left + insets.right;
+        int totalHeight = GAME_SIZE.getHeight() + insets.top + insets.bottom;
+
+        // Insets를 반영한 정확한 크기로 창 설정
+        setSize(totalWidth, totalHeight);
+        setLocationRelativeTo(null);
+        revalidate();
         setVisible(true);
     }
 

@@ -1,6 +1,8 @@
 package game;
 
 public class Line {
+
+
     public boolean checkIsFull() {
         return false;
     }
@@ -8,4 +10,5 @@ public class Line {
     public void clear() {
 
     }
+
 }
