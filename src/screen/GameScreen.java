@@ -4,10 +4,13 @@ import game.Board;
 import game.EventHandler;
 import game.block.Block;
 import score.Score;
+import setting.GameKey;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import static setting.GameSettings.GAME_SIZE;
 
@@ -32,6 +35,7 @@ public class GameScreen extends Screen {
         board = new Board();
 
         setFocusable(true);
+        setKeyListener();
         requestFocusInWindow();
     }
 
@@ -72,6 +76,23 @@ public class GameScreen extends Screen {
     }
 
     public void showNicknameInputPane() {
+    }
+
+    private void setKeyListener() {
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == GameKey.MOVE_LEFT_KEY.getKey()) board.moveLeft();
+                else if (e.getKeyCode() == GameKey.MOVE_RIGHT_KEY.getKey()) board.moveRight();
+                else if (e.getKeyCode() == GameKey.MOVE_DOWN_KEY.getKey()) board.moveDown();
+//                else if (e.getKeyCode() == GameKey.SUPER_DROP_KEY.getKey()) board.getCurrBlock().superDrop();
+//                else if (e.getKeyCode() == GameKey.ROTATE_KEY.getKey()) board.getCurrBlock().rotateBlock();
+//                else if (e.getKeyCode() == GameKey.PAUSE_KEY.getKey()) pause();
+//                else if (e.getKeyCode() == GameKey.GAME_OVER_KEY.getKey()) gameOver();
+
+                boardArea.repaint();
+            }
+        });
     }
 
     public class BoardArea extends JPanel {

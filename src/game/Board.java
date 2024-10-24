@@ -75,15 +75,43 @@ public class Board {
         }
     }
 
-    public boolean canMoveLeft(Block block) {
-        return false;
+    public boolean canMoveLeft() {
+        if (currBlock.getLeftEdge() <= 0) return false;
+
+        int[][] blockShape = currBlock.getBlockType().getShape();
+
+        for (int i = 0; i < currBlock.getHeight(); ++i) {
+            for (int j = 0; j < currBlock.getWidth(); ++j) {
+                if (blockShape[i][j] == 1) {
+                    int x = currBlock.getPosition().getX() / GAME_SIZE.getBlockCellSize() + j;
+                    int y = currBlock.getPosition().getY() / GAME_SIZE.getBlockCellSize() + i;
+                    if (lines[y][x - 1] != null) return false;
+                }
+            }
+        }
+
+        return true;
     }
 
-    public boolean canMoveRight(Block block) {
-        return false;
+    public boolean canMoveRight() {
+        if (currBlock.getRightEdge() >= GAME_SIZE.getGameAreaWidth()) return false;
+
+        int[][] blockShape = currBlock.getBlockType().getShape();
+
+        for (int i = 0; i < currBlock.getHeight(); ++i) {
+            for (int j = 0; j < currBlock.getWidth(); ++j) {
+                if (blockShape[i][j] == 1) {
+                    int x = currBlock.getPosition().getX() / GAME_SIZE.getBlockCellSize() + j;
+                    int y = currBlock.getPosition().getY() / GAME_SIZE.getBlockCellSize() + i;
+                    if (lines[y][x + 1] != null) return false;
+                }
+            }
+        }
+
+        return true;
     }
 
-    public boolean canRotate(Block block) {
+    public boolean canRotate() {
         return false;
     }
 
@@ -125,5 +153,17 @@ public class Board {
 
     public Color[][] getLines() {
         return lines;
+    }
+
+    public void moveLeft() {
+        if (canMoveLeft()) {
+            currBlock.moveLeft();
+        }
+    }
+
+    public void moveRight() {
+        if (canMoveRight()) {
+            currBlock.moveRight();
+        }
     }
 }
