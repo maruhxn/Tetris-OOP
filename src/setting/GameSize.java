@@ -1,23 +1,29 @@
 package setting;
 
 public enum GameSize {
-    S(300, 400, 20, 100, 200),
-    M(600, 800, 40, 200, 400),
-    L(750, 1000, 50, 250, 500),
+    S(0, 300, 400, 20, 100, 200),
+    M(1, 600, 800, 40, 200, 400),
+    L(2, 750, 1000, 50, 250, 500),
     ;
 
+    private final int id;
     private final int width;
     private final int height;
     private final int blockCellSize;
     private final int infoAreaWidth;
     private final int gameAreaWidth;
 
-    GameSize(int width, int height, int blockCellSize, int infoAreaWidth, int gameAreaWidth) {
+    GameSize(int id, int width, int height, int blockCellSize, int infoAreaWidth, int gameAreaWidth) {
+        this.id = id;
         this.width = width;
         this.height = height;
         this.blockCellSize = blockCellSize;
         this.infoAreaWidth = infoAreaWidth;
         this.gameAreaWidth = gameAreaWidth;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getWidth() {

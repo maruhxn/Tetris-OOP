@@ -43,7 +43,7 @@ public class GameClient extends JFrame {
         setContentPane(screen);
         revalidate();
         repaint();
-        requestFocus();
+        screen.requestFocusInWindow();
     }
 
     public void startGame() {
