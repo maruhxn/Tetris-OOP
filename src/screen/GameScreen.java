@@ -4,6 +4,7 @@ import game.Board;
 import game.EventHandler;
 import game.block.Block;
 import score.Score;
+import setting.GameFont;
 import setting.GameKey;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import static setting.GameSettings.GAME_SIZE;
 
@@ -23,11 +25,13 @@ public class GameScreen extends Screen {
     private EventHandler eventHandler;
     private Score score;
 
+    private boolean isPaused = false;
+
     public void initGame() {
         initLayout();
 
         timer = new Timer(1000, e -> {
-            triggerMoveBlock();
+            if (!isPaused) triggerMoveBlock();
         });
 
         eventHandler = new EventHandler();
@@ -65,12 +69,46 @@ public class GameScreen extends Screen {
     }
 
     public void pause() {
+        // 키 이벤트 멈춤
+        resetKeyListeners();
+
+        if (isPaused) { // 게임 재개
+            continueGame();
+        } else { // 게임 정지
+            stopGame();
+        }
+
+        isPaused = !isPaused;
+        boardArea.repaint();
+    }
+
+    private void resetKeyListeners() {
+        for (KeyListener kl : getKeyListeners()) {
+            removeKeyListener(kl);
+        }
     }
 
     public void continueGame() {
+        setKeyListener();
+        timer.restart();
     }
 
-    public void exitGame() {
+    public void stopGame() {
+        timer.stop();
+        // p에만 반응하도록
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == GameKey.PAUSE_KEY.getKey()) {
+                    pause();
+                } else if (e.getKeyCode() == GameKey.GAME_OVER_KEY.getKey()) gameOver();
+            }
+        });
+    }
+
+    public void gameOver(
+    ) {
+        System.out.println("Game Over");
     }
 
     public void showPausePane() {
@@ -88,8 +126,7 @@ public class GameScreen extends Screen {
                 else if (e.getKeyCode() == GameKey.MOVE_DOWN_KEY.getKey()) board.moveDown();
 //                else if (e.getKeyCode() == GameKey.SUPER_DROP_KEY.getKey()) board.getCurrBlock().superDrop();
                 else if (e.getKeyCode() == GameKey.ROTATE_KEY.getKey()) board.rotateBlock();
-//                else if (e.getKeyCode() == GameKey.PAUSE_KEY.getKey()) pause();
-//                else if (e.getKeyCode() == GameKey.GAME_OVER_KEY.getKey()) gameOver();
+                else if (e.getKeyCode() == GameKey.PAUSE_KEY.getKey()) pause();
 
                 boardArea.repaint();
             }
@@ -127,9 +164,11 @@ public class GameScreen extends Screen {
             }
 
             // STATUS TEXT
-//            g.setColor(Color.WHITE);
-//            g.setFont(GameFont.SMALL.getFont());
-//            g.drawString(((GameScreen) getParent()).getStatus() ? "PAUSE!!" : "PLAYING!", GAME_SIZE.getGameAreaWidth() / 2 - 20, 20);
+            if (isPaused) {
+                g.setColor(Color.WHITE);
+                g.setFont(GameFont.SMALL.getFont());
+                g.drawString("PAUSE!!, Press 'ESC' to exit game.", GAME_SIZE.getGameAreaWidth() / 2 - 120, 20);
+            }
         }
 
         private void drawLines(Graphics g) {
