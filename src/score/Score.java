@@ -4,8 +4,12 @@ public class Score {
 
     private int score;
 
-    public void addScore(int lineCnt) {
+    private final int SCORE_UNIT = 100;
 
+    public void addScore(int lineCnt) {
+        if (lineCnt <= 0) return;
+
+        score += lineCnt * SCORE_UNIT;
     }
 
     public void saveScore(String username) {

@@ -109,11 +109,47 @@ public class Board {
         return true;
     }
 
-    public void clearLines() {
-        checkLines();
+    public int clearLines() {
+        int fullLineCount = 0;
+
+        for (int y = lines.length - 1; y >= 0; y--) {
+            
+            // 만약 라인이 모두 채워졌다면
+            if (checkLines(y)) {
+                fullLineCount++;
+
+                pullAboveLines(y);
+
+                // 방금 채워진 라인을 삭제했으므로 같은 위치에서 다시 검사
+                y++;
+            }
+        }
+
+        return fullLineCount;
     }
 
-    public void checkLines() {
+    private void pullAboveLines(int y) {
+        // 위에 있는 라인들을 모두 한 칸씩 아래로 내림
+        for (int i = y; i > 0; i--) {
+            lines[i] = lines[i - 1];
+        }
+
+        // 최상단 라인은 빈 라인으로 설정
+        lines[0] = new Color[GAME_SIZE.getGameAreaWidth() / GAME_SIZE.getBlockCellSize()];
+    }
+
+    public boolean checkLines(int lineNumber) {
+        boolean isFullLine = true;
+
+        // 해당 라인이 모두 채워졌는지 검사
+        for (int x = 0; x < lines[lineNumber].length; x++) {
+            if (lines[lineNumber][x] == null) {
+                isFullLine = false;
+                break;
+            }
+        }
+
+        return isFullLine;
     }
 
     public boolean isGameOver() {

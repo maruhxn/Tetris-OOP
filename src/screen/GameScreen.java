@@ -53,7 +53,8 @@ public class GameScreen extends Screen {
 
     private void triggerMoveBlock() {
         board.moveDown();
-        board.clearLines();
+        int clearedLines = board.clearLines();
+        score.addScore(clearedLines);
         boardArea.repaint();
         gameInfoArea.repaint();
     }
