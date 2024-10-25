@@ -139,20 +139,6 @@ public class Board {
         lines[0] = new Color[GAME_SIZE.getGameAreaWidth() / GAME_SIZE.getBlockCellSize()];
     }
 
-//    public boolean checkLines(int lineNumber) {
-//        boolean isFullLine = true;
-//
-//        // 해당 라인이 모두 채워졌는지 검사
-//        for (int x = 0; x < lines[lineNumber].length; x++) {
-//            if (lines[lineNumber][x] == null) {
-//                isFullLine = false;
-//                break;
-//            }
-//        }
-//
-//        return isFullLine;
-//    }
-
     private boolean checkLineIsFull(int lineNumber) {
         return Arrays.stream(lines[lineNumber]).allMatch(Objects::nonNull);
     }
@@ -206,5 +192,14 @@ public class Board {
         if (canRotate()) {
             currBlock.rotate();
         }
+    }
+
+    public void superDrop() {
+        while (canMoveDown()) {
+            currBlock.moveDown();
+        }
+
+        fixBlock();
+        replaceNextWithCurr();
     }
 }

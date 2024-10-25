@@ -164,7 +164,7 @@ public class GameScreen extends Screen {
                 if (e.getKeyCode() == GameKey.MOVE_LEFT_KEY.getKey()) board.moveLeft();
                 else if (e.getKeyCode() == GameKey.MOVE_RIGHT_KEY.getKey()) board.moveRight();
                 else if (e.getKeyCode() == GameKey.MOVE_DOWN_KEY.getKey()) board.moveDown();
-//                else if (e.getKeyCode() == GameKey.SUPER_DROP_KEY.getKey()) board.getCurrBlock().superDrop();
+                else if (e.getKeyCode() == GameKey.SUPER_DROP_KEY.getKey()) board.superDrop();
                 else if (e.getKeyCode() == GameKey.ROTATE_KEY.getKey()) board.rotateBlock();
                 else if (e.getKeyCode() == GameKey.PAUSE_KEY.getKey()) pause();
 
