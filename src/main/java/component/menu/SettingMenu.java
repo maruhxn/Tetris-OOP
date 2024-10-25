@@ -11,7 +11,7 @@ public class SettingMenu extends AbstractMenu {
     public void setActionListener() {
         super.addActionListener(e -> {
             GameClient client = (GameClient) extractClient();
-            client.changeScreen(client.getSettingsScreen());
+            client.goToSettingScreen();
         });
     }
 }

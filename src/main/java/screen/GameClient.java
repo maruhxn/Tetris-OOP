@@ -53,11 +53,24 @@ public class GameClient extends JFrame {
         setVisible(true);
     }
 
-    public void changeScreen(Screen screen) {
+    public void resize() {
+        Insets insets = getInsets();
+        int totalWidth = GAME_SIZE.getWidth() + insets.left + insets.right;
+        int totalHeight = GAME_SIZE.getHeight() + insets.top + insets.bottom;
+
+        setSize(totalWidth, totalHeight);
+        revalidate();
+    }
+
+    private void changeScreen(Screen screen) {
         setContentPane(screen);
         revalidate();
         repaint();
         screen.requestFocusInWindow();
+    }
+
+    public void goToMainScreen() {
+        this.changeScreen(mainScreen);
     }
 
     public void goToScoreboardScreen() {
@@ -65,24 +78,13 @@ public class GameClient extends JFrame {
         scoreBoardScreen.updateScoreBoard();
     }
 
+    public void goToSettingScreen() {
+        this.changeScreen(settingsScreen);
+    }
+
     public void startGame() {
+        this.changeScreen(gameScreen);
         this.gameScreen.initGame();
         this.gameScreen.start();
-    }
-
-    public MainScreen getMainScreen() {
-        return mainScreen;
-    }
-
-    public GameScreen getGameScreen() {
-        return gameScreen;
-    }
-
-    public SettingScreen getSettingsScreen() {
-        return settingsScreen;
-    }
-
-    public ScoreBoardScreen getScoreBoardScreen() {
-        return scoreBoardScreen;
     }
 }

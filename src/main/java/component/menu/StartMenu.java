@@ -11,7 +11,6 @@ public class StartMenu extends AbstractMenu {
     public void setActionListener() {
         super.addActionListener(e -> {
             GameClient client = extractClient();
-            client.changeScreen(client.getGameScreen());
             client.startGame();
         });
     }

@@ -36,6 +36,12 @@ public class GameScreen extends Screen {
 
     public void initGame() {
         initLayout();
+        initResource();
+    }
+
+    private void initResource() {
+        isPaused = false;
+        score = 0;
 
         timer = new Timer(1000, e -> {
             if (!isPaused) triggerMoveBlock();
@@ -125,8 +131,6 @@ public class GameScreen extends Screen {
 
     public void exitGame(
     ) {
-        System.out.println("Game Over");
-
         if (timer.isRunning()) {
             timer.stop();
         }

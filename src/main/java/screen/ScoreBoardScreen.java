@@ -51,7 +51,7 @@ public class ScoreBoardScreen extends Screen {
 
             homeBtn.addActionListener(e -> {
                 GameClient client = (GameClient) getTopLevelAncestor();
-                client.changeScreen(client.getMainScreen());
+                client.goToMainScreen();
             });
 
             add(homeBtn);

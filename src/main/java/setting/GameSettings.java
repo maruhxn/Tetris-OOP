@@ -8,7 +8,7 @@ public class GameSettings {
 
     private static final Properties properties = new Properties();
 
-    public static GameSize GAME_SIZE = GameSize.M;
+    public static GameSize GAME_SIZE = GameSize.S;
 
     static {
         try (FileInputStream input = new FileInputStream("settings.properties")) {

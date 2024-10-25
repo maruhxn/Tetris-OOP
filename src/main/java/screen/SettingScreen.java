@@ -10,8 +10,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static screen.GameClient.WINDOW_BORDER;
-import static screen.GameClient.WINDOW_MANAGER_HEIGHT;
 import static setting.GameSettings.GAME_SIZE;
 import static util.Utility.addPadding;
 
@@ -90,8 +88,7 @@ public class SettingScreen extends Screen {
 
         private void resizeClient() {
             GameClient client = (GameClient) getTopLevelAncestor();
-            client.setSize(GAME_SIZE.getWidth() + WINDOW_BORDER, GAME_SIZE.getHeight() + WINDOW_MANAGER_HEIGHT);
-            client.revalidate();
+            client.resize();
         }
 
         private class SizeBtn extends Button {
@@ -131,7 +128,7 @@ public class SettingScreen extends Screen {
                 super(text);
                 addActionListener(e -> {
                     GameClient client = (GameClient) getTopLevelAncestor();
-                    client.changeScreen(client.getMainScreen());
+                    client.goToMainScreen();
                 });
             }
         }
