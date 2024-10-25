@@ -1,5 +1,7 @@
 package screen;
 
+import score.ScoreDao;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,17 +17,20 @@ public class GameClient extends JFrame {
     private SettingScreen settingsScreen;
     private ScoreBoardScreen scoreBoardScreen;
 
-    public GameClient() {
+    private ScoreDao scoreDao;
+
+    public GameClient(ScoreDao scoreDao) {
         super("TETRIS");
+        this.scoreDao = scoreDao;
         setBackground(Color.BLACK);
         initScreens();
     }
 
     private void initScreens() {
         this.mainScreen = new MainScreen();
-        this.gameScreen = new GameScreen();
+        this.gameScreen = new GameScreen(scoreDao);
         this.settingsScreen = new SettingScreen();
-        this.scoreBoardScreen = new ScoreBoardScreen();
+        this.scoreBoardScreen = new ScoreBoardScreen(scoreDao);
     }
 
     public void start() {

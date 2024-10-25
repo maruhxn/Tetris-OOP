@@ -4,6 +4,8 @@ import game.block.Block;
 import game.block.BlockType;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 import static setting.GameSettings.GAME_SIZE;
@@ -113,9 +115,8 @@ public class Board {
         int fullLineCount = 0;
 
         for (int y = lines.length - 1; y >= 0; y--) {
-            
             // 만약 라인이 모두 채워졌다면
-            if (checkLines(y)) {
+            if (checkLineIsFull(y)) {
                 fullLineCount++;
 
                 pullAboveLines(y);
@@ -138,22 +139,26 @@ public class Board {
         lines[0] = new Color[GAME_SIZE.getGameAreaWidth() / GAME_SIZE.getBlockCellSize()];
     }
 
-    public boolean checkLines(int lineNumber) {
-        boolean isFullLine = true;
+//    public boolean checkLines(int lineNumber) {
+//        boolean isFullLine = true;
+//
+//        // 해당 라인이 모두 채워졌는지 검사
+//        for (int x = 0; x < lines[lineNumber].length; x++) {
+//            if (lines[lineNumber][x] == null) {
+//                isFullLine = false;
+//                break;
+//            }
+//        }
+//
+//        return isFullLine;
+//    }
 
-        // 해당 라인이 모두 채워졌는지 검사
-        for (int x = 0; x < lines[lineNumber].length; x++) {
-            if (lines[lineNumber][x] == null) {
-                isFullLine = false;
-                break;
-            }
-        }
-
-        return isFullLine;
+    private boolean checkLineIsFull(int lineNumber) {
+        return Arrays.stream(lines[lineNumber]).allMatch(Objects::nonNull);
     }
 
-    public boolean isGameOver() {
-        return false;
+    public boolean checkGameOver() {
+        return Arrays.stream(lines[0]).anyMatch(Objects::nonNull);
     }
 
     public Block getCurrBlock() {

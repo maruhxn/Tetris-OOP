@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234      # 원하는 root 비밀번호로 변경
+      MYSQL_DATABASE: tetris_db                # 데이터베이스 이름
+      MYSQL_USER: tetris_user                  # 사용자 이름
+      MYSQL_PASSWORD: user_password             # 사용자 비밀번호
+    ports:
+      - "3306:3306"                            # MySQL 포트 노출
+    volumes:
+      - tetris_data:/var/lib/mysql             # Named Volume 생성
+
+volumes:
+  tetris_data:

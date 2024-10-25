@@ -4,6 +4,7 @@ import game.Board;
 import game.EventHandler;
 import game.block.Block;
 import score.Score;
+import score.ScoreDao;
 import setting.GameFont;
 import setting.GameKey;
 
@@ -14,6 +15,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import static setting.Constants.SCORE_UNIT;
 import static setting.GameSettings.GAME_SIZE;
 
 public class GameScreen extends Screen {
@@ -23,9 +25,14 @@ public class GameScreen extends Screen {
     private Timer timer;
     private Board board;
     private EventHandler eventHandler;
-    private Score score;
+    private int score;
+    private ScoreDao scoreDao;
 
     private boolean isPaused = false;
+
+    public GameScreen(ScoreDao scoreDao) {
+        this.scoreDao = scoreDao;
+    }
 
     public void initGame() {
         initLayout();
@@ -35,7 +42,6 @@ public class GameScreen extends Screen {
         });
 
         eventHandler = new EventHandler();
-        score = new Score();
         board = new Board();
 
         setFocusable(true);
@@ -58,9 +64,20 @@ public class GameScreen extends Screen {
     private void triggerMoveBlock() {
         board.moveDown();
         int clearedLines = board.clearLines();
-        score.addScore(clearedLines);
+        addScore(clearedLines);
+
+        if (board.checkGameOver()) {
+            exitGame();
+        }
+
         boardArea.repaint();
         gameInfoArea.repaint();
+    }
+
+    private void addScore(int lineCnt) {
+        if (lineCnt <= 0) return;
+
+        score += lineCnt * SCORE_UNIT;
     }
 
     public void start() {
@@ -75,7 +92,7 @@ public class GameScreen extends Screen {
         if (isPaused) { // 게임 재개
             continueGame();
         } else { // 게임 정지
-            stopGame();
+            pauseGame();
         }
 
         isPaused = !isPaused;
@@ -93,7 +110,7 @@ public class GameScreen extends Screen {
         timer.restart();
     }
 
-    public void stopGame() {
+    public void pauseGame() {
         timer.stop();
         // p에만 반응하도록
         addKeyListener(new KeyAdapter() {
@@ -101,14 +118,33 @@ public class GameScreen extends Screen {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == GameKey.PAUSE_KEY.getKey()) {
                     pause();
-                } else if (e.getKeyCode() == GameKey.GAME_OVER_KEY.getKey()) gameOver();
+                } else if (e.getKeyCode() == GameKey.GAME_OVER_KEY.getKey()) exitGame();
             }
         });
     }
 
-    public void gameOver(
+    public void exitGame(
     ) {
         System.out.println("Game Over");
+
+        if (timer.isRunning()) {
+            timer.stop();
+        }
+
+        resetKeyListeners();
+
+        // 현재 점수를 보여주고 닉네임을 입력받음
+        String message = "GAME OVER!\nYour Score: " + score + "\nEnter your username:";
+        String username = JOptionPane.showInputDialog(this, message, "Game Over", JOptionPane.PLAIN_MESSAGE);
+
+        if (username != null && !username.trim().isEmpty()) {
+            // 입력된 닉네임과 점수를 저장하거나 랭킹에 추가
+            Score scoreEntity = new Score(username, score);
+            scoreDao.save(scoreEntity);
+        }
+
+        GameClient client = (GameClient) getTopLevelAncestor();
+        client.changeScreen(client.getScoreBoardScreen());
     }
 
     public void showPausePane() {
@@ -258,7 +294,7 @@ public class GameScreen extends Screen {
             public void paint(Graphics g) {
                 super.paint(g);
 //            levelLabel.setText("LEVEL : " + GameManager.getLevel());
-                scoreLabel.setText("SCORE : " + score.getScore());
+                scoreLabel.setText("SCORE : " + score);
             }
         }
     }
