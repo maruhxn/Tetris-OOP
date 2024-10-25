@@ -52,7 +52,7 @@ public class ScoreDao {
 
     public List<Score> getTopScores() {
         List<Score> topScores = new ArrayList<>();
-        String query = "SELECT * FROM scores ORDER BY score DESC LIMIT 10";
+        String query = "SELECT * FROM scores ORDER BY score DESC, created_at ASC LIMIT 10";
 
         try (Connection conn = DriverManager.getConnection(url, username, password);
              PreparedStatement stmt = conn.prepareStatement(query);

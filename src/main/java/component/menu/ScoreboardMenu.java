@@ -11,7 +11,7 @@ public class ScoreboardMenu extends AbstractMenu {
     public void setActionListener() {
         super.addActionListener(e -> {
             GameClient client = (GameClient) extractClient();
-            client.changeScreen(client.getScoreBoardScreen());
+            client.goToScoreboardScreen();
         });
     }
 }

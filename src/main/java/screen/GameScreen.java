@@ -144,7 +144,7 @@ public class GameScreen extends Screen {
         }
 
         GameClient client = (GameClient) getTopLevelAncestor();
-        client.changeScreen(client.getScoreBoardScreen());
+        client.goToScoreboardScreen();
     }
 
     public void showPausePane() {

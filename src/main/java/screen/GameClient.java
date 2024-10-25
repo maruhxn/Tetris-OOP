@@ -60,6 +60,11 @@ public class GameClient extends JFrame {
         screen.requestFocusInWindow();
     }
 
+    public void goToScoreboardScreen() {
+        this.changeScreen(scoreBoardScreen);
+        scoreBoardScreen.updateScoreBoard();
+    }
+
     public void startGame() {
         this.gameScreen.initGame();
         this.gameScreen.start();
