@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static setting.GameSettings.GAME_SIZE;
+import static setting.GameSettings.setGameSize;
 import static util.Utility.addPadding;
 
 public class SettingScreen extends Screen {
@@ -34,7 +35,7 @@ public class SettingScreen extends Screen {
     }
 
     public void saveSettings() {
-        GameSettings.setGameSize(selectedSize);
+        GameSettings.saveSettings();
         sizeControlArea.resizeClient();
     }
 
@@ -100,6 +101,7 @@ public class SettingScreen extends Screen {
 
         private void selectAndHighlightBtn(GameSize gameSize) {
             selectedSize = gameSize;
+            setGameSize(gameSize);
             for (int i = 0; i < sizeBtns.size(); ++i) {
                 if (i == gameSize.getId()) {
                     sizeBtns.get(i).setBackground(Color.YELLOW);
