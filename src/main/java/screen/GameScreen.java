@@ -29,6 +29,7 @@ public class GameScreen extends Screen {
     private ScoreDao scoreDao;
 
     private boolean isPaused = false;
+    private boolean isItemMode = false;
 
     public GameScreen(ScoreDao scoreDao) {
         this.scoreDao = scoreDao;
@@ -39,21 +40,10 @@ public class GameScreen extends Screen {
         initResource();
     }
 
-    private void initResource() {
-        isPaused = false;
-        score = 0;
-        level = 1;
-        lastScoreForProgress = 0;
 
-        timer = new Timer(1000, e -> {
-            if (!isPaused) triggerMoveBlock();
-        });
-
-        board = new Board();
-
-        setFocusable(true);
-        setKeyListener();
-        requestFocusInWindow();
+    public void initItemMode() {
+        isItemMode = true;
+        initGame();
     }
 
     private void initLayout() {
@@ -66,6 +56,23 @@ public class GameScreen extends Screen {
 
         boardArea.revalidate();
         gameInfoArea.revalidate();
+    }
+
+    private void initResource() {
+        isPaused = false;
+        score = 0;
+        level = 1;
+        lastScoreForProgress = 0;
+
+        timer = new Timer(1000, e -> {
+            if (!isPaused) triggerMoveBlock();
+        });
+
+        board = new Board(isItemMode);
+
+        setFocusable(true);
+        setKeyListener();
+        requestFocusInWindow();
     }
 
     private void triggerMoveBlock() {

@@ -87,4 +87,10 @@ public class GameClient extends JFrame {
         this.gameScreen.initGame();
         this.gameScreen.start();
     }
+
+    public void startItemMode() {
+        this.changeScreen(gameScreen);
+        this.gameScreen.initItemMode();
+        this.gameScreen.start();
+    }
 }

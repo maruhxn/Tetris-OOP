@@ -51,6 +51,14 @@ public enum BlockType {
             },
             Color.RED
     ),
+    WeightItem(
+            new int[][]{
+                    {0, 1, 0},
+                    {1, 1, 1},
+                    {1, 1, 1}
+            },
+            Color.WHITE
+    ),
 
     ;
 

@@ -1,9 +1,6 @@
 package screen;
 
-import component.menu.ExitMenu;
-import component.menu.ScoreboardMenu;
-import component.menu.SettingMenu;
-import component.menu.StartMenu;
+import component.menu.*;
 import setting.GameFont;
 
 import javax.swing.*;
@@ -38,6 +35,7 @@ public class MainScreen extends Screen {
 
     private void initMenuButtons() {
         menus.add(new StartMenu("GAME START"));
+        menus.add(new ItemModeMenu("ITEM MODE"));
         menus.add(new SettingMenu("SETTING"));
         menus.add(new ScoreboardMenu("SCORE BOARD"));
         menus.add(new ExitMenu("EXIT"));

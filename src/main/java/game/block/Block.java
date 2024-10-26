@@ -9,7 +9,7 @@ public class Block {
     private int[][] shape;
 
     public Block(BlockType blockType) {
-        this.position = new Position();
+        this.position = blockType.equals(BlockType.WeightItem) ? Position.spawnRandomPosition() : new Position();
         this.blockType = blockType;
         this.shape = blockType.getShape();
     }

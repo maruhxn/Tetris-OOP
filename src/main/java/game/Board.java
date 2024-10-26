@@ -16,7 +16,11 @@ public class Board {
     private Block currBlock;
     private Block nextBlock;
     private Color[][] lines = new Color[GAME_SIZE.getHeight() / GAME_SIZE.getBlockCellSize()][GAME_SIZE.getGameAreaWidth() / GAME_SIZE.getBlockCellSize()];
+    private boolean isItemMode;
 
+    public Board(boolean isItemMode) {
+        this.isItemMode = isItemMode;
+    }
 
     public void setUp() {
         spawnBlock();
@@ -24,8 +28,9 @@ public class Board {
     }
 
     public void spawnBlock() {
+        int itemRange = isItemMode ? BlockType.values().length : 7;
         Random random = new Random();
-        switch (random.nextInt(7)) {
+        switch (random.nextInt(itemRange)) {
             case 0 -> setNextBlock(new Block(BlockType.OBlock));
             case 1 -> setNextBlock(new Block(BlockType.IBlock));
             case 2 -> setNextBlock(new Block(BlockType.JBlock));
@@ -33,6 +38,7 @@ public class Board {
             case 4 -> setNextBlock(new Block(BlockType.SBlock));
             case 5 -> setNextBlock(new Block(BlockType.TBlock));
             case 6 -> setNextBlock(new Block(BlockType.ZBlock));
+            case 7 -> setNextBlock(new Block(BlockType.WeightItem));
         }
     }
 
@@ -42,6 +48,8 @@ public class Board {
     }
 
     public void fixBlock() {
+        if (currBlock.getBlockType().equals(BlockType.WeightItem)) return;
+
         int[][] shape = currBlock.getShape();
         int h = currBlock.getHeight();
         int w = currBlock.getWidth();
@@ -59,6 +67,7 @@ public class Board {
     }
 
     private boolean canMove(int xDirection, int yDirection) {
+        BlockType blockType = currBlock.getBlockType();
         int[][] blockShape = currBlock.getShape();
 
         for (int i = 0; i < currBlock.getHeight(); ++i) {
@@ -68,8 +77,14 @@ public class Board {
                     int y = currBlock.getPosition().getY() / GAME_SIZE.getBlockCellSize() + i + yDirection;
 
                     if (x < 0 || x >= GAME_SIZE.getGameAreaWidth() / GAME_SIZE.getBlockCellSize() ||
-                            y < 0 || y >= GAME_SIZE.getHeight() / GAME_SIZE.getBlockCellSize() ||
-                            lines[y][x] != null) {
+                            y < 0 || y >= GAME_SIZE.getHeight() / GAME_SIZE.getBlockCellSize()) {
+                        return false;
+                    }
+
+                    if (lines[y][x] != null) {
+                        if (blockType.equals(BlockType.WeightItem)) {
+                            return true;
+                        }
                         return false;
                     }
                 }
@@ -84,14 +99,18 @@ public class Board {
     }
 
     public boolean canMoveLeft() {
+        if (currBlock.getBlockType().equals(BlockType.WeightItem)) return false;
         return canMove(-1, 0);
     }
 
     public boolean canMoveRight() {
+        if (currBlock.getBlockType().equals(BlockType.WeightItem)) return false;
         return canMove(1, 0);
     }
 
     public boolean canRotate() {
+        if (currBlock.getBlockType().equals(BlockType.WeightItem)) return false;
+
         int[][] rotatedShape = currBlock.getRotatedShape();
 
         for (int i = 0; i < rotatedShape.length; ++i) {
@@ -178,9 +197,24 @@ public class Board {
     public void moveDown() {
         if (canMoveDown()) {
             currBlock.moveDown();
+            if (currBlock.getBlockType().equals(BlockType.WeightItem)) {
+                weightBlockProgress();
+            }
         } else {
             fixBlock();
             replaceNextWithCurr();
+        }
+    }
+
+    private void weightBlockProgress() {
+        for (int i = 0; i < currBlock.getHeight(); ++i) {
+            for (int j = 0; j < currBlock.getHeight(); ++j) {
+                if (currBlock.getShape()[i][j] == 1) {
+                    int x = currBlock.getPosition().getX() / GAME_SIZE.getBlockCellSize() + j;
+                    int y = currBlock.getPosition().getY() / GAME_SIZE.getBlockCellSize() + i;
+                    lines[y][x] = null;
+                }
+            }
         }
     }
 
@@ -209,6 +243,9 @@ public class Board {
     public void superDrop() {
         while (canMoveDown()) {
             currBlock.moveDown();
+            if (currBlock.getBlockType().equals(BlockType.WeightItem)) {
+                weightBlockProgress();
+            }
         }
 
         fixBlock();
