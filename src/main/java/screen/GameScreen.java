@@ -14,7 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import static setting.Constants.SCORE_UNIT;
+import static setting.Constants.*;
 import static setting.GameSettings.GAME_SIZE;
 
 public class GameScreen extends Screen {
@@ -24,6 +24,8 @@ public class GameScreen extends Screen {
     private Timer timer;
     private Board board;
     private int score;
+    private int level;
+    private int lastScoreForProgress;
     private ScoreDao scoreDao;
 
     private boolean isPaused = false;
@@ -40,6 +42,8 @@ public class GameScreen extends Screen {
     private void initResource() {
         isPaused = false;
         score = 0;
+        level = 1;
+        lastScoreForProgress = 0;
 
         timer = new Timer(1000, e -> {
             if (!isPaused) triggerMoveBlock();
@@ -81,6 +85,34 @@ public class GameScreen extends Screen {
         if (unitCnt <= 0) return;
 
         score += (int) (unitCnt * SCORE_UNIT);
+
+        while (checkShouldDoLevelProgress()) {
+            handleLevelProgression();
+        }
+    }
+
+    public boolean checkShouldDoLevelProgress() {
+        int scoreThreshold = (level < 10) ? LEVEL_UP_THRESHOLD : HANDICAP_LINE_THRESHOLD;
+
+        if (score >= lastScoreForProgress + scoreThreshold) {
+            lastScoreForProgress += scoreThreshold; // 다음 검사 기준 갱신
+            return true;
+        }
+        return false;
+    }
+
+    public void handleLevelProgression() {
+        if (level < 10) {
+            levelUp();
+        } else {
+            board.addRandomLineWithEmptyCell();
+        }
+    }
+
+
+    public void levelUp() {
+        level++;
+        timer.setDelay(1000 - (level * 50));
     }
 
     public void start() {
@@ -148,11 +180,6 @@ public class GameScreen extends Screen {
         client.goToScoreboardScreen();
     }
 
-    public void showPausePane() {
-    }
-
-    public void showNicknameInputPane() {
-    }
 
     private void setKeyListener() {
         this.addKeyListener(new KeyAdapter() {
@@ -294,7 +321,7 @@ public class GameScreen extends Screen {
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-//            levelLabel.setText("LEVEL : " + GameManager.getLevel());
+                levelLabel.setText("LEVEL : " + level);
                 scoreLabel.setText("SCORE : " + score);
             }
         }

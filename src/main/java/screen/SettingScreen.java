@@ -30,17 +30,9 @@ public class SettingScreen extends Screen {
         add(navArea);
     }
 
-    public void selectBoardSize(GameSize gameSize) {
-
-    }
-
     public void saveSettings() {
         GameSettings.saveSettings();
         sizeControlArea.resizeClient();
-    }
-
-    public void displayConfirmation() {
-
     }
 
     private class SizeControlArea extends JPanel {

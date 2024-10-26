@@ -214,4 +214,20 @@ public class Board {
         fixBlock();
         replaceNextWithCurr();
     }
+
+    public void addRandomLineWithEmptyCell() {
+        // 모든 라인 위로 하나씩 당기기
+        for (int i = 1; i < lines.length; i++) {
+            lines[i - 1] = lines[i];
+        }
+
+        // 최상단 라인은 빈 라인으로 설정
+        Random rand = new Random();
+        int emptyCellIndex = rand.nextInt(GAME_SIZE.getGameAreaWidth() / GAME_SIZE.getBlockCellSize());
+        lines[lines.length - 1] = new Color[GAME_SIZE.getGameAreaWidth() / GAME_SIZE.getBlockCellSize()];
+        for (int i = 0; i < lines[0].length; i++) {
+            if (i == emptyCellIndex) continue;
+            lines[lines.length - 1][i] = Color.LIGHT_GRAY;
+        }
+    }
 }

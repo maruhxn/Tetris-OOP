@@ -67,14 +67,6 @@ public class MainScreen extends Screen {
         });
     }
 
-    public void startGame() {
-
-    }
-
-    public void openGameSettings() {
-
-    }
-
     private void setSelectedMenuColor(Color bgColor, Color textColor) {
         menus.get(selectedIndex).setBackground(bgColor);
         menus.get(selectedIndex).setForeground(textColor);
