@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
+import static setting.Constants.COMBO_SCORE_RATE;
 import static setting.GameSettings.GAME_SIZE;
 
 public class Board {
@@ -111,22 +112,33 @@ public class Board {
         return true;
     }
 
-    public int clearLines() {
-        int fullLineCount = 0;
+    public double clearLines() {
+        double clearedUnits = 0;
+        int combo = 0;
 
         for (int y = lines.length - 1; y >= 0; y--) {
             // 만약 라인이 모두 채워졌다면
             if (checkLineIsFull(y)) {
-                fullLineCount++;
+                clearedUnits++;
+                combo++;
 
                 pullAboveLines(y);
 
                 // 방금 채워진 라인을 삭제했으므로 같은 위치에서 다시 검사
                 y++;
+            } else {
+                if (combo > 1) {
+                    clearedUnits += combo * COMBO_SCORE_RATE;
+                }
+                combo = 0;
             }
         }
 
-        return fullLineCount;
+        if (combo > 1) {
+            clearedUnits += combo * COMBO_SCORE_RATE;
+        }
+
+        return clearedUnits;
     }
 
     private void pullAboveLines(int y) {

@@ -1,7 +1,6 @@
 package screen;
 
 import game.Board;
-import game.EventHandler;
 import game.block.Block;
 import score.Score;
 import score.ScoreDao;
@@ -24,7 +23,6 @@ public class GameScreen extends Screen {
     private GameInfoArea gameInfoArea;
     private Timer timer;
     private Board board;
-    private EventHandler eventHandler;
     private int score;
     private ScoreDao scoreDao;
 
@@ -47,7 +45,6 @@ public class GameScreen extends Screen {
             if (!isPaused) triggerMoveBlock();
         });
 
-        eventHandler = new EventHandler();
         board = new Board();
 
         setFocusable(true);
@@ -69,8 +66,8 @@ public class GameScreen extends Screen {
 
     private void triggerMoveBlock() {
         board.moveDown();
-        int clearedLines = board.clearLines();
-        addScore(clearedLines);
+        double clearedUnits = board.clearLines();
+        addScore(clearedUnits);
 
         if (board.checkGameOver()) {
             exitGame();
@@ -80,10 +77,10 @@ public class GameScreen extends Screen {
         gameInfoArea.repaint();
     }
 
-    private void addScore(int lineCnt) {
-        if (lineCnt <= 0) return;
+    private void addScore(double unitCnt) {
+        if (unitCnt <= 0) return;
 
-        score += lineCnt * SCORE_UNIT;
+        score += (int) (unitCnt * SCORE_UNIT);
     }
 
     public void start() {
