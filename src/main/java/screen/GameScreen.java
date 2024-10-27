@@ -2,6 +2,7 @@ package screen;
 
 import game.Board;
 import game.block.Block;
+import game.item_mode.ItemModeBoard;
 import score.Score;
 import score.ScoreDao;
 import setting.GameFont;
@@ -29,21 +30,19 @@ public class GameScreen extends Screen {
     private ScoreDao scoreDao;
 
     private boolean isPaused = false;
-    private boolean isItemMode = false;
 
     public GameScreen(ScoreDao scoreDao) {
         this.scoreDao = scoreDao;
     }
 
-    public void initGame() {
+    public void initGame(boolean isItemMode) {
         initLayout();
         initResource();
+        setBoard(isItemMode);
     }
 
-
-    public void initItemMode() {
-        isItemMode = true;
-        initGame();
+    private void setBoard(boolean isItemMode) {
+        board = isItemMode ? new ItemModeBoard() : new Board();
     }
 
     private void initLayout() {
@@ -67,8 +66,6 @@ public class GameScreen extends Screen {
         timer = new Timer(1000, e -> {
             if (!isPaused) triggerMoveBlock();
         });
-
-        board = new Board(isItemMode);
 
         setFocusable(true);
         setKeyListener();
