@@ -19,6 +19,11 @@ public class Position {
         this.y = 0;
     }
 
+    public Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public static Position spawnRandomPosition() {
         return new Position(new Random().nextInt(GameSettings.GAME_SIZE.getGameAreaWidth()) - GameSettings.GAME_SIZE.getBlockCellSize() * 3);
     }

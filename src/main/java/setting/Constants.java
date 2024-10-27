@@ -5,4 +5,5 @@ public interface Constants {
     double COMBO_SCORE_RATE = 0.5;
     int LEVEL_UP_THRESHOLD = 1000;
     int HANDICAP_LINE_THRESHOLD = 500;
+    int ATTACK_LINES_THRESHOLD = 500;
 }

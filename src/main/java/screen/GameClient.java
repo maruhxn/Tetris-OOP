@@ -93,4 +93,10 @@ public class GameClient extends JFrame {
         this.gameScreen.initGame(true);
         this.gameScreen.start();
     }
+
+    public void startMultiPlayMode() {
+        MultiModeGameScreen multiModeGameScreen = new MultiModeGameScreen(scoreDao);
+        this.changeScreen(multiModeGameScreen);
+        multiModeGameScreen.waitOpponent();
+    }
 }

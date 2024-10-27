@@ -36,6 +36,7 @@ public class MainScreen extends Screen {
     private void initMenuButtons() {
         menus.add(new StartMenu("GAME START"));
         menus.add(new ItemModeMenu("ITEM MODE"));
+        menus.add(new MultiPlayModeMenu("MULTI PLAY MODE"));
         menus.add(new SettingMenu("SETTING"));
         menus.add(new ScoreboardMenu("SCORE BOARD"));
         menus.add(new ExitMenu("EXIT"));

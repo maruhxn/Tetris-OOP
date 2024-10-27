@@ -62,19 +62,11 @@ public class Block {
         return 0;
     }
 
-    public int getBottomEdge() {
-        return this.position.getY() + getHeight() * GAME_SIZE.getBlockCellSize();
-    }
-
-    public int getLeftEdge() {
-        return this.position.getX();
-    }
-
-    public int getRightEdge() {
-        return this.position.getX() + (getWidth() * GAME_SIZE.getBlockCellSize());
-    }
-
     public int[][] getShape() {
         return shape;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

@@ -13,6 +13,11 @@ repositories {
 
 dependencies {
     implementation 'mysql:mysql-connector-java:8.0.21'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3' // 최신 버전으로 변경 가능
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.3'
+    implementation 'javax.websocket:javax.websocket-client-api:1.1'
+    implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.9'
 }
 
 test {

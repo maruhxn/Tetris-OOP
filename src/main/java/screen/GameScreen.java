@@ -20,16 +20,16 @@ import static setting.GameSettings.GAME_SIZE;
 
 public class GameScreen extends Screen {
 
-    private BoardArea boardArea;
-    private GameInfoArea gameInfoArea;
-    private Timer timer;
-    private Board board;
-    private int score;
-    private int level;
-    private int lastScoreForProgress;
-    private ScoreDao scoreDao;
+    protected BoardArea boardArea;
+    protected GameInfoArea gameInfoArea;
+    protected Timer timer;
+    protected Board board;
+    protected int score;
+    protected int level;
+    protected int lastScoreForProgress;
+    protected ScoreDao scoreDao;
 
-    private boolean isPaused = false;
+    protected boolean isPaused = false;
 
     public GameScreen(ScoreDao scoreDao) {
         this.scoreDao = scoreDao;
@@ -72,7 +72,7 @@ public class GameScreen extends Screen {
         requestFocusInWindow();
     }
 
-    private void triggerMoveBlock() {
+    protected void triggerMoveBlock() {
         board.moveDown();
         double clearedUnits = board.clearLines();
         addScore(clearedUnits);
@@ -85,7 +85,7 @@ public class GameScreen extends Screen {
         gameInfoArea.repaint();
     }
 
-    private void addScore(double unitCnt) {
+    protected void addScore(double unitCnt) {
         if (unitCnt <= 0) return;
 
         score += (int) (unitCnt * SCORE_UNIT);
@@ -138,7 +138,7 @@ public class GameScreen extends Screen {
         boardArea.repaint();
     }
 
-    private void resetKeyListeners() {
+    protected void resetKeyListeners() {
         for (KeyListener kl : getKeyListeners()) {
             removeKeyListener(kl);
         }
@@ -185,7 +185,7 @@ public class GameScreen extends Screen {
     }
 
 
-    private void setKeyListener() {
+    protected void setKeyListener() {
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -201,7 +201,7 @@ public class GameScreen extends Screen {
         });
     }
 
-    public class BoardArea extends JPanel {
+    protected class BoardArea extends JPanel {
 
         public BoardArea() {
             setBackground(Color.BLACK);
@@ -218,6 +218,7 @@ public class GameScreen extends Screen {
 
         private void drawBlock(Graphics g) {
             Block currBlock = board.getCurrBlock();
+            if (currBlock == null) return;
             int[][] blockShape = currBlock.getShape();
             Color color = currBlock.getBlockType().getColor();
 
@@ -259,7 +260,7 @@ public class GameScreen extends Screen {
         }
     }
 
-    private class GameInfoArea extends JPanel {
+    protected class GameInfoArea extends JPanel {
         public GameInfoArea() {
             setBackground(Color.BLACK);
             setForeground(Color.WHITE);
